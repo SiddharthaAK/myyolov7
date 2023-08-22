@@ -248,10 +248,8 @@ diff_image.show()
 
 ## Conclusion
 
-By following the steps in this README, you can perform inference using the YOLOv7 model, export it to ONNX, and compare the outputs of both models. There are differences in inference image obtained and I've not been able to find out the exact reasons for them. The clearly visible differences in the inference images is floating-point precision, hence leading to small numerical variations in predictions. Since the input images for both the models are the same, the only other reasons I assume might be the cause of these differences are 
-- issues while converting .pt to .onnx (unable to see any issues, will come back to it)
-- different input preprocessing between .pt and .onnx model (working on it)
-- PyTorch and ONNX Runtime might handle certain operations differently due to variations in backend libraries(will look into it soon)
+By following the steps in this README, you can perform inference using the YOLOv7 model, export it to ONNX, and compare the outputs of both models. The reason for difference in the inferences is due to:
+- issues while converting .pt to .onnx 
 
 The grayscale images only show the parts of the image that have variation in pixels
 - White: Maximum difference possible
