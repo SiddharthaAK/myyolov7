@@ -191,7 +191,7 @@ with open(output_raw_data_path, "wb") as file:
 ```
 
 
-### 2. The following script will print whether the raw data from the .pt and .onnx models are the same or different.
+### 2. Comparing raw data
 ```
 with open(pt_raw_data_path,"rb") as file:
   pt_raw_data = file.read()
@@ -205,19 +205,27 @@ if pt_raw_data == onnx_raw_data:
 else:
     print("Raw data from .pt and .onnx models are different.")
 ```
-### 3. Converting raw data to grayscale image:
+### 3. Converting inference images to greyscale and comparing 
 ```
-def rd_to_img(rd,width,height):
-  # Convert raw data to numpy array
-  array = np.frombuffer(rd,dtype=np.uint8)
-  # Reshape to image dimensions
-  image_array = array.reshape((height, width, 3))
-  # Create PIL Image
-  image = Image.fromarray(image_array)
-  return image
+from PIL import Image, ImageChops
+import numpy as np
 
-pt_image = rd_to_img(pt_raw_data,512,773)
-onnx_image = rd_to_img(onnx_raw_data,512,773)
+# Assuming pt_inference_image and output_inference_image are NumPy arrays
+
+# Convert NumPy arrays to Pillow Image objects
+pt_image_pil = Image.fromarray(np.uint8(pt_inference_image))
+output_image_pil = Image.fromarray(np.uint8(output_inference_image))
+
+# Convert images to grayscale and compute the absolute difference
+pt_gray_image = pt_image_pil.convert("L")
+output_gray_image = output_image_pil.convert("L")
+diff_image = ImageChops.difference(pt_gray_image, output_gray_image)
+diff_image = diff_image.convert("RGB")
+
+# Save and display the difference image
+diff_image.save("difference_image1.png")
+diff_image.show()
+
 ```
 ## Viewing Differences
 
